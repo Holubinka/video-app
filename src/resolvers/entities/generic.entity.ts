@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Status {
@@ -16,4 +16,12 @@ export class GenericIdInput {
 export class WhereUniqueInput {
   @Field(() => ID)
   id: string;
+}
+
+@InputType()
+export class PaginationInput {
+  @Field(() => Int)
+  take: number;
+  @Field(() => Int)
+  skip: number;
 }

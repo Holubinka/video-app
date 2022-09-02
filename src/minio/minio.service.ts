@@ -16,17 +16,12 @@ export class MinioService {
     useSSL: false,
   });
 
-  async putFile(name: string, buffer: Buffer, userId: string) {
+  async putFile(name: string, buffer: Buffer, userId: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.client.putObject(
-        MD5(userId).toString(),
-        `${MD5(userId).toString()}/${name}`,
-        buffer,
-        (err, res) => {
-          if (err) reject(err);
-          resolve(res);
-        },
-      );
+      this.client.putObject(userId, name, buffer, (err, res) => {
+        if (err) reject(err);
+        resolve(name);
+      });
     });
   }
 
@@ -41,7 +36,7 @@ export class MinioService {
 
   async makeBucket(userId: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      const name = MD5(userId).toString();
+      const name = userId;
       this.client.makeBucket(name, 'us-east-1', function (err) {
         if (err) return reject(err);
         resolve(name);
@@ -50,10 +45,11 @@ export class MinioService {
   }
 
   async listFiles(@CurrentUser() { userId }: { userId?: string }) {
-    return this.client.listObjectsV2(MD5(userId).toString());
+    return this.client.listObjectsV2(userId);
   }
 
   async getFile(name: string, @CurrentUser() { userId }: { userId?: string }) {
-    return this.client.getObject(MD5(userId).toString(), name);
+    this.client.presignedUrl('GET', userId, name);
+    return this.client.getObject(userId, name);
   }
 }

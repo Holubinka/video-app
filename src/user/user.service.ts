@@ -12,7 +12,7 @@ export class UserService {
     });
   }
 
-  async create(data: RegisterUserInput & { profileDocsUrl: string }) {
+  async create(data: RegisterUserInput) {
     return this.prisma.user.create({
       data: {
         ...data,

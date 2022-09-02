@@ -37,10 +37,9 @@ export class AuthResolver {
   async register(@Args('data') data: RegisterUserInput) {
     const id = uuid();
     try {
-      const profileDocsUrl = await this.minioService.makeBucket(id);
+      await this.minioService.makeBucket(id);
       const user = await this.userService.create({
         ...data,
-        profileDocsUrl,
         id,
       });
       return {

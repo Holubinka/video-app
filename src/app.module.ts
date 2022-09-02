@@ -8,6 +8,7 @@ import { ScalarsModule } from './scalars/scalars.module';
 import { ResolversModule } from './resolvers/resolvers.module';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthModule,
     ScalarsModule,
     UserModule,
+    PostModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,

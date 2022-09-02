@@ -4,14 +4,16 @@
 
 type User {
   id: ID!
-  firstName: String!
-  lastName: String!
-  email: String!
+  email: SecureString!
   emailHash: String!
-  password: String
+  password: SecureString
   active: Boolean!
   registeredOn: Date!
+  username: String!
 }
+
+"""Secure String scalar"""
+scalar SecureString
 
 """Date custom scalar type"""
 scalar Date
@@ -25,14 +27,31 @@ type Status {
   status: String!
 }
 
+type Post {
+  id: ID!
+  title: String!
+  description: String
+  author: User
+  authorId: String!
+  videoUrl: String!
+  createdOn: Date!
+}
+
 type Query {
   me: User!
+  posts(pagination: PaginationInput!): [Post!]!
+}
+
+input PaginationInput {
+  take: Int!
+  skip: Int!
 }
 
 type Mutation {
   uploadFile(file: Upload!): Status!
   login(email: SecureStringInput!, password: SecureStringInput!): Auth!
   register(data: RegisterUserInput!): Auth!
+  createPost(post: CreatePostInput!): Post!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -45,11 +64,13 @@ input SecureStringInput {
 }
 
 input RegisterUserInput {
-  firstName: String!
-  lastName: String!
   email: SecureString!
   password: SecureString!
+  username: String!
 }
 
-"""Secure String scalar"""
-scalar SecureString
+input CreatePostInput {
+  title: String!
+  description: String
+  video: Upload!
+}

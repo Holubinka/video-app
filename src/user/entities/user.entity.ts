@@ -1,23 +1,22 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { SecureStringScalar } from 'src/scalars/secure-string.scalar';
 
 @ObjectType()
 export class User {
   @Field(() => ID)
   id: string;
-  @Field()
-  firstName: string;
-  @Field()
-  lastName: string;
-  @Field()
+  @Field(() => SecureStringScalar)
   email: string;
   @Field()
   emailHash: string;
-  @Field({ nullable: true })
+  @Field(() => SecureStringScalar, { nullable: true })
   password?: string;
   @Field()
   active: boolean;
   @Field(() => Date)
   registeredOn: Date;
+  @Field()
+  username: string;
 }
 
 @ObjectType()

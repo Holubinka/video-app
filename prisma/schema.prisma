@@ -12,12 +12,21 @@ datasource db {
 
 model User {
   id           String   @id @default(cuid())
-  firstName    String
-  lastName     String
   email        String
   emailHash    String
+  username     String
   password     String
   active       Boolean  @default(true)
-  approved     Boolean  @default(false)
   registeredOn DateTime @default(now())
+  Post         Post[]
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  videoUrl    String?
+  createdOn   DateTime @default(now())
 }

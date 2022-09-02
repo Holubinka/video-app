@@ -5,12 +5,10 @@ import { SecureStringScalar } from 'src/scalars/secure-string.scalar';
 @InputType()
 export class RegisterUserInput {
   id?: string;
-  @Field()
-  firstName: string;
-  @Field()
-  lastName: string;
   @Field(() => SecureStringScalar)
   email: SecureStringInput;
   @Field(() => SecureStringScalar)
   password: SecureStringInput;
+  @Field()
+  username: string;
 }
