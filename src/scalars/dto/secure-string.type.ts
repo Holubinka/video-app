@@ -1,6 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field } from '@nestjs/graphql';
 
-@InputType()
 export class SecureStringInput {
   @Field()
   raw: string;

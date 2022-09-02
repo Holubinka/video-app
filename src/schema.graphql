@@ -49,19 +49,13 @@ input PaginationInput {
 
 type Mutation {
   uploadFile(file: Upload!): Status!
-  login(email: SecureStringInput!, password: SecureStringInput!): Auth!
+  login(email: SecureString!, password: SecureString!): Auth!
   register(data: RegisterUserInput!): Auth!
   createPost(post: CreatePostInput!): Post!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
-
-input SecureStringInput {
-  raw: String!
-  hash: String!
-  encrypted: String!
-}
 
 input RegisterUserInput {
   email: SecureString!

@@ -23,7 +23,12 @@ $ yarn run start:prod
 
 ## Short description
 
-Once ready, the app should resemble TikTok, with possibility for user to register/authenticate, upload and view short videos of other users. Currently there's not much, but there already are a few resolvers, scalars and services for future use.
+This project demonstrates a setup & configuration of NestJS application with MinIO and Prisma(PostgreSQL). It is a part of proprietary software, therefore a big chunk of code was trimmed out. Only overall config, basic models and resolvers stayed intact for demo purposes. 3rd party services (Minio, Postgres) have been dockerized, but the application itself still runs locally. Examples of usage are attached below.
 
 Stack:
 NestJS, GraphQL, PostgreSQL, Prisma, Minio, PassportJS
+
+![Register](demo/register.png?raw=true 'Register')
+![Login](demo/login.png?raw=true 'Login')
+![CreatePost](demo/createPost.png?raw=true 'CreatePost')
+![Posts](demo/posts.png?raw=true 'Posts')

@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Info } from '@nestjs/graphql';
 import { Auth } from 'src/user/entities/user.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { RegisterUserInput } from 'src/user/dto/register-user.input';
@@ -8,6 +8,9 @@ import { v4 as uuid } from 'uuid';
 import { UseGuards } from '@nestjs/common';
 import { GqlThrottlerGuard } from 'src/decorators/throttler-guard.decorator';
 import { SecureStringInput } from 'src/scalars/dto/secure-string.type';
+import { Context as ContextType } from 'src/context';
+import { GraphQLResolveInfo } from 'graphql';
+import { SecureStringScalar } from 'src/scalars/secure-string.scalar';
 
 @UseGuards(GqlThrottlerGuard)
 @Resolver('Auth')
@@ -20,8 +23,9 @@ export class AuthResolver {
 
   @Mutation(() => Auth, { name: 'login' })
   async login(
-    @Args('email') email: SecureStringInput,
-    @Args('password') password: SecureStringInput,
+    @Args('email', { type: () => SecureStringScalar }) email: SecureStringInput,
+    @Args('password', { type: () => SecureStringScalar })
+    password: SecureStringInput,
   ) {
     const user = await this.authService.validateUser({
       email: email.hash,
@@ -34,14 +38,22 @@ export class AuthResolver {
   }
 
   @Mutation(() => Auth, { name: 'register' })
-  async register(@Args('data') data: RegisterUserInput) {
+  async register(
+    @Args('data') data: RegisterUserInput,
+    @Context() ctx: ContextType,
+    @Info() info: GraphQLResolveInfo,
+  ) {
     const id = uuid();
+    const select = new ctx.PrismaSelect(info).valueOf('user', 'User');
     try {
       await this.minioService.makeBucket(id);
-      const user = await this.userService.create({
-        ...data,
-        id,
-      });
+      const user = await this.userService.create(
+        {
+          ...data,
+          id,
+        },
+        select,
+      );
       return {
         user,
         token: this.authService.signToken(user.id),

@@ -37,9 +37,13 @@ export class PostService {
   }
 
   async findAll(pagination: PaginationInput, select?: any) {
-    return this.prisma.post.findMany({
+    const posts = await this.prisma.post.findMany({
       ...pagination,
       ...select,
     });
+    return posts.map((post) => ({
+      ...post,
+      videoUrl: new URL(`${process.env.MINIO_ADDRESS}${post.videoUrl}`),
+    }));
   }
 }

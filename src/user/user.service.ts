@@ -12,7 +12,7 @@ export class UserService {
     });
   }
 
-  async create(data: RegisterUserInput) {
+  async create(data: RegisterUserInput, select?: any) {
     return this.prisma.user.create({
       data: {
         ...data,
@@ -20,6 +20,7 @@ export class UserService {
         emailHash: data.email.hash,
         password: data.password.hash,
       },
+      ...select,
     });
   }
 
