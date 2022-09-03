@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3000;
   app.use(cookieParser());
   app.use(
     graphqlUploadExpress({
@@ -12,6 +13,6 @@ async function bootstrap() {
       maxFiles: 5,
     }),
   );
-  await app.listen(3000);
+  await app.listen(port);
 }
 bootstrap();
